@@ -3,9 +3,7 @@
 #include<math.h>
 #include<gl/glut.h>
 #include<algorithm>
-#include<vector>
 using namespace std;
-const double PI = 3.14159;
 const int window_width = 600, window_height = 600;
 class Point {
 public:
@@ -21,60 +19,53 @@ void setPixel(int x, int y) {
 	glFlush();
 }
 void lineBresenham(int x0, int y0, int xEnd, int yEnd) {
-	int dx = fabs(xEnd - x0), dy = fabs(yEnd - y0);
-	int x, y;
-	if (dx > dy) {
-		int p = 2 * dy - dx;
-		int twoDy = 2 * dy, twoDyMinusDx = 2 * (dy - dx);
-		if (x0 > xEnd) {
-			x = xEnd;
-			y = yEnd;
-			xEnd = x0;
+	float k = fabs((float)(yEnd - y0) / (xEnd - x0));//判断斜率与1的关系
+	if (k > 1) {//画斜率大于1和小于-1的直线
+		int c = 1;//通过c的1和-1的不同实现正负斜率的直线的绘制
+		if (y0 > yEnd) {//确保起始点的y值小于结束点的
+			swap(x0, xEnd);
+			swap(y0, yEnd);
 		}
-		else {
-			x = x0;
-			y = y0;
+		k = (float)(xEnd - x0) / (yEnd - y0);
+		if (k < 0) {  //判断斜率的正负，c=1为正斜率，c=-1为负斜率
+			c = -1;
 		}
-
-		setPixel(round(x), round(y));
-		while (x < xEnd) {
-			x++;
-			if (p < 0)
-				p += twoDy;
-			else {
-				y++;
-				p += twoDyMinusDx;
-			}
-			setPixel(round(x), round(y));
-		}
-	}
-	else {
-		int p = 2 * dx - dy;
-		int twoDy = 2 * dx, twoDyMinusDx = 2 * (dx - dy);
-		if (y0 > yEnd) {
-
-			x = xEnd;
-			y = yEnd;
-			yEnd = y0;
-		}
-		else {
-			x = x0;
-			y = y0;
-		}
+		k = fabs(k);
+		float d = 0;
+		int x = x0, y = y0;
 		setPixel(round(x), round(y));
 		while (y < yEnd) {
-			y++;
-			if (p < 0)
-				p += twoDy;
-			else {
-				x++;
-				p += twoDyMinusDx;
+			d = d + k;
+			if (d > 0.5) {
+				x=c+x;
+				d--;
 			}
-			setPixel(round(x), round(y));
+			setPixel(round(x), round(++y));
 		}
 	}
-
-
+	else {//画斜率小于1并大于-1的直线
+		int c = 1;//通过c的1和-1的不同实现正负斜率的直线的绘制
+		if (x0 > xEnd) {   //确保起始点的x值小于结束点的
+			swap(x0, xEnd);
+			swap(y0, yEnd);
+		}
+		k = (float)(yEnd - y0) / (xEnd - x0);
+		if (k < 0) {//判断斜率的正负
+			c = -1; //判断斜率的正负，c=1为正斜率，c=-1为负斜率
+		}
+		k = fabs(k);
+		float d = 0;
+		int x = x0, y = y0;
+		setPixel(round(x), round(y));
+	while (x < xEnd) {
+		d = d + k;
+		if (d > 0.5){
+		y=y+c;
+		d--; 
+		}
+	setPixel(round(++x), round(y));
+	}
+	}
 }
 void Display_lineBre(void)
 {
@@ -86,7 +77,7 @@ void Display_lineBre(void)
 }
 void init() {
 	gluOrtho2D(0, window_width, 0, window_height);
-	glColor3f(0.0, 0.0, 1.0);
+	glColor3f(0.0, 1.0, 0.0);
 }
 int main(int argc, char* argv[])
 {
