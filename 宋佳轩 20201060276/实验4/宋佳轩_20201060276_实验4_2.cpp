@@ -14,6 +14,7 @@ struct point
 		x(xx), y(yy) {}
 };
 vector<point> vertice; //顶点
+//画点
 void setPixel(int x, int y) {
 	glBegin(GL_POINTS);
 	glVertex2i(x, y);
@@ -165,7 +166,7 @@ void PolyScan()
 }
 void polyscan_mouse(int button, int state, int x, int y)
 {
-	//左键
+	//左键,确定图像的一个顶点
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
 	{
 		setPixel(x, window_height - y);
@@ -174,7 +175,7 @@ void polyscan_mouse(int button, int state, int x, int y)
 		vertice.push_back(p);
 		cout << "顶点" << vertice.size() << ": (" << x << ", " << window_height - y << ")" << endl;
 	}
-	//右键
+	//右键，画出需要填充的多边形
 	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
 	{
 		glClearColor(1, 1, 1, 1);//设置绘制窗口颜色为白色
@@ -199,7 +200,7 @@ void polyscan_mouse(int button, int state, int x, int y)
 		glFlush();
 	}
 
-	//鼠标中间
+	//鼠标中间，填充
 	if (button == GLUT_MIDDLE_BUTTON && state == GLUT_DOWN)
 	{
 
@@ -217,7 +218,7 @@ void Display_polyscan()
 	glEnd();
 	glFlush();
 }
-void init() {
+void init() {//初始化
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluOrtho2D(0, window_width, 0, window_height);
