@@ -110,10 +110,6 @@ void display()
 }
 void myKeyboard(unsigned char key, int x, int y)
 {
-	/*float angle_x = 0;
-	float angle_y=0;
-	float co_x, si_x;
-	float co_y, si_y;*/
 	if (key == 'a' || key == 'A')
 		A[3][0] -= 5.0;
 	if (key == 'd' || key == 'D')
@@ -130,40 +126,17 @@ void myKeyboard(unsigned char key, int x, int y)
 		theta_ad += 5.0;
 	if (key == 'x' || key == 'X')
 		theta_ad -= 5.0;
-	if (key == 'v' || key == 'V')
+	if (key == 'c' || key == 'C')
 		theta_ws += 5.0;
-	if (key == 'b' || key == 'B')
+	if (key == 'v' || key == 'V')
 		theta_ws -= 5.0;
-	/*if (key == 'h' || key == 'H')
-		angle_x -= PI/6;
-	if (key == 'k' || key == 'K')
-		angle_x += PI / 6;
-	if (key == 'j' || key == 'J')
-		angle_y -= PI / 6;
-	if (key == 'u' || key == 'U')
-		angle_y += PI / 6;*/
 	if (theta_ad > 360) theta_ad -= 360;
 	if (theta_ad < 0) theta_ad += 360;
 	if (theta_ws > 360) theta_ws -= 360;
 	if (theta_ws < 0) theta_ws += 360;
-	if (key == 'c' || key == 'C')
+	if (key == 'b' || key == 'B')
 		exit(0);
 
-	/*co_x = cos(angle_x);
-	si_x = sin(angle_x);
-	co_y = cos(angle_y);
-	si_y = sin(angle_y);
-	if (angle_x != 0) {
-	A[1][1] = A[2][2] = co_x;
-	A[1][2] = si_x;
-	A[2][1] = -si_x;
-	}
-	if (angle_y != 0) {
-	A[2][2] = A[2][2] * co_y;
-	A[0][0] = co_y;
-	A[0][2] = si_y;
-	A[2][0] = -si_y;
-	}*/
 
 	for (int i = 0; i < vertice3D.size(); i++) {
 		vertice3D[i].x = vertice3D[i].x * A[0][0] + vertice3D[i].y * A[1][0] + vertice3D[i].z * A[2][0] + A[3][0];
@@ -175,47 +148,6 @@ void myKeyboard(unsigned char key, int x, int y)
 	glutPostRedisplay(); //重新调用绘制函数
 }
 
-void mouseact(int x, int y) {
-	float angle_x, co_x, si_x;
-	float angle_y, co_y, si_y;
-	int dx = x - oldx;
-	int dy = y - oldy;
-	/*angle_x = (float)dx / 600 * 360;
-	co_x = cos(angle_x);
-	si_x = sin(angle_x);
-	angle_y = (float)dy / 600 * 360;
-	co_y = cos(angle_y);
-	si_y = sin(angle_y);
-	A[1][1] = A[2][2] = co_x;
-	A[1][2] = si_x;
-	A[2][1] = -si_x;
-	A[2][2] = A[2][2] * co_y;
-	A[0][0] = co_y;
-	A[0][2] = si_y;
-	A[2][0] = -si_y;
-	for (int i = 0; i < vertice3D.size(); i++) {
-		vertice3D[i].x = vertice3D[i].x * A[0][0] + vertice3D[i].y * A[1][0] + vertice3D[i].z * A[2][0] + A[3][0];
-		vertice3D[i].y = vertice3D[i].x * A[0][1] + vertice3D[i].y * A[1][1] + vertice3D[i].z * A[2][1] + A[3][1];
-		vertice3D[i].z = vertice3D[i].x * A[0][2] + vertice3D[i].y * A[1][2] + vertice3D[i].z * A[2][2] + A[3][2];
-
-	}
-	A[0][0] = A[1][1] = A[2][2] = 1;
-	A[1][2] = A[2][1] = A[0][2] = A[2][0] = 0;*/
-	glutPostRedisplay(); //重新调用绘制函数
-}
-void mymouse(int button, int state, int x, int y)
-{
-
-	//左键按下
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-	{
-		mouseact(600 - x, y);
-	}
-
-	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN)
-	{
-	}
-}
 
 void reshape(int w, int h) //重绘回调函数，在窗口首次创建或用户改变窗口尺寸时被调用
 {
@@ -233,6 +165,7 @@ void init()
 
 void main(int argc, char** argv)
 {
+	cout << "WASDQE控制平移，zxcv控制旋转，b退出"<<endl;
 	initPixel();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB);
